@@ -1,0 +1,512 @@
+<?php
+/**
+ * PartnerApiKeyValidationRateLimits
+ *
+ * PHP version 7.4
+ *
+ * @category Class
+ * @package  LifePlus\SDK
+ * @author   OpenAPI Generator team
+ * @link     https://openapi-generator.tech
+ */
+
+/**
+ * LifePlus Healthcare Platform API
+ *
+ * # LifePlus Healthcare Platform API  Enterprise-grade healthcare platform API for partner integration and third-party developers.  ## Platform Capabilities  ### Healthcare Services - **Telemedicine**: Video consultations with licensed doctors - **Appointments**: In-person doctor appointments at hospitals - **Diagnostics**: Lab tests and diagnostic services - **Home Sample Collection**: At-home diagnostic sample collection - **Ambulance**: Emergency ambulance booking - **Home Care**: Nursing and home care services  ### E-Commerce - **Pharmacy**: Medicine ordering and delivery - **Lifestyle Products**: Health supplements, medical devices - **Shopping Cart**: Multi-vendor cart management - **Order Fulfillment**: Complete order lifecycle management  ### Insurance & Packages - **Health Packages**: Subscription-based healthcare bundles - **Health Cards**: Membership cards with benefits - **Insurance Policies**: Policy browsing and purchase - **Claims Management**: Insurance claim processing  ## Architecture Overview  This API follows **domain-driven design** with clear separation of concerns:  ### Microservices Layer - **Auth Service**: JWT-based authentication and authorization - **User Service**: User profiles and beneficiary management - **Order Service**: Unified order processing for all order types - **Healthcare Service**: Medical services orchestration - **Product Service**: Catalog and inventory management - **Payment Service**: Payment gateway integration - **Notification Service**: SMS, email, push notifications  ### Service Layer (Business Logic) - Video call session management (Agora integration) - Doctor availability and slot booking - Package benefit calculation and tracking - Promo code validation and discount application - Corporate package enrollment  ### Integration Layer (Packages/SDKs) - **Go SDK**: High-performance SDK for Go applications - **PHP Laravel SDK**: Native Laravel package for PHP apps - **TypeScript SDK**: Modern TypeScript client with types  ### External Plugins - **SSL Commerz**: Payment gateway for Bangladesh - **Agora.io**: Real-time video/audio communication - **Firebase**: Push notifications - **AWS S3**: File storage  ## API Standards  ### REST Principles - **Resource-Based URIs**: Use plural nouns (`/orders`, `/users`, `/appointments`) - **HTTP Verbs**: GET (read), POST (create), PATCH (update), DELETE (remove) - **Stateless**: Each request contains all necessary information - **HATEOAS**: Include links to related resources when applicable  ### Naming Conventions - ✅ **Correct**: `/orders`, `/appointments`, `/products` - ❌ **Incorrect**: `/product-orders`, `/get-orders`, `/createAppointment`  ### Response Format All responses follow a consistent structure: ```json {   \"success\": true,   \"message\": \"Operation completed successfully\",   \"data\": { ... },   \"meta\": { \"pagination\": {...} } } ```  ### Error Handling Errors follow RFC 7807 Problem Details: ```json {   \"success\": false,   \"message\": \"Validation failed\",   \"code\": 422,   \"errors\": {     \"email\": [\"The email field is required\"],     \"phone\": [\"The phone format is invalid\"]   } } ```  ### Pagination List endpoints support consistent pagination: - `page`: Current page number (default: 1) - `per_page`: Items per page (default: 15, max: 100) - `sort`: Field to sort by (default: created_at) - `order`: Sort direction (asc/desc, default: desc) - `q`: Search query  ### Authentication Most endpoints require JWT Bearer authentication: ``` Authorization: Bearer <your_jwt_token> ```  Obtain a token by calling `POST /sessions` with valid credentials.  ### Rate Limiting - **Standard**: 60 requests/minute per IP - **Authenticated**: 120 requests/minute per user - **Partner API**: Custom limits based on agreement  ### Versioning - API version is in the URL: `/api/v1` - Breaking changes will result in new version: `/api/v2` - Old versions supported for 12 months after deprecation notice  ## SDK Usage  ### Go SDK ```go import \"github.com/LifeplusBangladesh/lifeplus-go-sdk\"  client := lifeplus.NewClient(\"your-api-key\") products, err := client.Products.List(context.Background(), &lifeplus.ProductListOptions{     Page: 1,     PerPage: 20, }) ```  ### PHP Laravel SDK ```php use LifePlus\\SDK\\LifePlusClient;  $client = new LifePlusClient(env('LIFEPLUS_API_KEY')); $products = $client->products()->list(['per_page' => 20]); ```  ### TypeScript SDK ```typescript import { LifePlusClient } from '@lifeplus/sdk';  const client = new LifePlusClient({ apiKey: 'your-api-key' }); const products = await client.products.list({ perPage: 20 }); ```
+ *
+ * The version of the OpenAPI document: 2.0.0
+ * Contact: mamun@lifeplusbd.com
+ * Generated by: https://openapi-generator.tech
+ * Generator version: 7.10.0
+ */
+
+/**
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+
+namespace LifePlus\SDK\Model;
+
+use \ArrayAccess;
+use \LifePlus\SDK\ObjectSerializer;
+
+/**
+ * PartnerApiKeyValidationRateLimits Class Doc Comment
+ *
+ * @category Class
+ * @package  LifePlus\SDK
+ * @author   OpenAPI Generator team
+ * @link     https://openapi-generator.tech
+ * @implements \ArrayAccess<string, mixed>
+ */
+class PartnerApiKeyValidationRateLimits implements ModelInterface, ArrayAccess, \JsonSerializable
+{
+    public const DISCRIMINATOR = null;
+
+    /**
+      * The original name of the model.
+      *
+      * @var string
+      */
+    protected static $openAPIModelName = 'PartnerApiKeyValidationRateLimits';
+
+    /**
+      * Array of property to type mappings. Used for (de)serialization
+      *
+      * @var string[]
+      */
+    protected static $openAPITypes = [
+        'per_minute' => 'int',
+        'per_hour' => 'int',
+        'remaining_minute' => 'int',
+        'remaining_hour' => 'int'
+    ];
+
+    /**
+      * Array of property to format mappings. Used for (de)serialization
+      *
+      * @var string[]
+      * @phpstan-var array<string, string|null>
+      * @psalm-var array<string, string|null>
+      */
+    protected static $openAPIFormats = [
+        'per_minute' => null,
+        'per_hour' => null,
+        'remaining_minute' => null,
+        'remaining_hour' => null
+    ];
+
+    /**
+      * Array of nullable properties. Used for (de)serialization
+      *
+      * @var boolean[]
+      */
+    protected static array $openAPINullables = [
+        'per_minute' => false,
+        'per_hour' => false,
+        'remaining_minute' => false,
+        'remaining_hour' => false
+    ];
+
+    /**
+      * If a nullable field gets set to null, insert it here
+      *
+      * @var boolean[]
+      */
+    protected array $openAPINullablesSetToNull = [];
+
+    /**
+     * Array of property to type mappings. Used for (de)serialization
+     *
+     * @return array
+     */
+    public static function openAPITypes()
+    {
+        return self::$openAPITypes;
+    }
+
+    /**
+     * Array of property to format mappings. Used for (de)serialization
+     *
+     * @return array
+     */
+    public static function openAPIFormats()
+    {
+        return self::$openAPIFormats;
+    }
+
+    /**
+     * Array of nullable properties
+     *
+     * @return array
+     */
+    protected static function openAPINullables(): array
+    {
+        return self::$openAPINullables;
+    }
+
+    /**
+     * Array of nullable field names deliberately set to null
+     *
+     * @return boolean[]
+     */
+    private function getOpenAPINullablesSetToNull(): array
+    {
+        return $this->openAPINullablesSetToNull;
+    }
+
+    /**
+     * Setter - Array of nullable field names deliberately set to null
+     *
+     * @param boolean[] $openAPINullablesSetToNull
+     */
+    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
+    {
+        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+    }
+
+    /**
+     * Checks if a property is nullable
+     *
+     * @param string $property
+     * @return bool
+     */
+    public static function isNullable(string $property): bool
+    {
+        return self::openAPINullables()[$property] ?? false;
+    }
+
+    /**
+     * Checks if a nullable property is set to null.
+     *
+     * @param string $property
+     * @return bool
+     */
+    public function isNullableSetToNull(string $property): bool
+    {
+        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
+    }
+
+    /**
+     * Array of attributes where the key is the local name,
+     * and the value is the original name
+     *
+     * @var string[]
+     */
+    protected static $attributeMap = [
+        'per_minute' => 'perMinute',
+        'per_hour' => 'perHour',
+        'remaining_minute' => 'remainingMinute',
+        'remaining_hour' => 'remainingHour'
+    ];
+
+    /**
+     * Array of attributes to setter functions (for deserialization of responses)
+     *
+     * @var string[]
+     */
+    protected static $setters = [
+        'per_minute' => 'setPerMinute',
+        'per_hour' => 'setPerHour',
+        'remaining_minute' => 'setRemainingMinute',
+        'remaining_hour' => 'setRemainingHour'
+    ];
+
+    /**
+     * Array of attributes to getter functions (for serialization of requests)
+     *
+     * @var string[]
+     */
+    protected static $getters = [
+        'per_minute' => 'getPerMinute',
+        'per_hour' => 'getPerHour',
+        'remaining_minute' => 'getRemainingMinute',
+        'remaining_hour' => 'getRemainingHour'
+    ];
+
+    /**
+     * Array of attributes where the key is the local name,
+     * and the value is the original name
+     *
+     * @return array
+     */
+    public static function attributeMap()
+    {
+        return self::$attributeMap;
+    }
+
+    /**
+     * Array of attributes to setter functions (for deserialization of responses)
+     *
+     * @return array
+     */
+    public static function setters()
+    {
+        return self::$setters;
+    }
+
+    /**
+     * Array of attributes to getter functions (for serialization of requests)
+     *
+     * @return array
+     */
+    public static function getters()
+    {
+        return self::$getters;
+    }
+
+    /**
+     * The original name of the model.
+     *
+     * @return string
+     */
+    public function getModelName()
+    {
+        return self::$openAPIModelName;
+    }
+
+
+    /**
+     * Associative array for storing property values
+     *
+     * @var mixed[]
+     */
+    protected $container = [];
+
+    /**
+     * Constructor
+     *
+     * @param mixed[] $data Associated array of property values
+     *                      initializing the model
+     */
+    public function __construct(array $data = null)
+    {
+        $this->setIfExists('per_minute', $data ?? [], null);
+        $this->setIfExists('per_hour', $data ?? [], null);
+        $this->setIfExists('remaining_minute', $data ?? [], null);
+        $this->setIfExists('remaining_hour', $data ?? [], null);
+    }
+
+    /**
+    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+    * $this->openAPINullablesSetToNull array
+    *
+    * @param string $variableName
+    * @param array  $fields
+    * @param mixed  $defaultValue
+    */
+    private function setIfExists(string $variableName, array $fields, $defaultValue): void
+    {
+        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+            $this->openAPINullablesSetToNull[] = $variableName;
+        }
+
+        $this->container[$variableName] = $fields[$variableName] ?? $defaultValue;
+    }
+
+    /**
+     * Show all the invalid properties with reasons.
+     *
+     * @return array invalid properties with reasons
+     */
+    public function listInvalidProperties()
+    {
+        $invalidProperties = [];
+
+        return $invalidProperties;
+    }
+
+    /**
+     * Validate all the properties in the model
+     * return true if all passed
+     *
+     * @return bool True if all properties are valid
+     */
+    public function valid()
+    {
+        return count($this->listInvalidProperties()) === 0;
+    }
+
+
+    /**
+     * Gets per_minute
+     *
+     * @return int|null
+     */
+    public function getPerMinute()
+    {
+        return $this->container['per_minute'];
+    }
+
+    /**
+     * Sets per_minute
+     *
+     * @param int|null $per_minute Rate limit per minute
+     *
+     * @return self
+     */
+    public function setPerMinute($per_minute)
+    {
+        if (is_null($per_minute)) {
+            throw new \InvalidArgumentException('non-nullable per_minute cannot be null');
+        }
+        $this->container['per_minute'] = $per_minute;
+
+        return $this;
+    }
+
+    /**
+     * Gets per_hour
+     *
+     * @return int|null
+     */
+    public function getPerHour()
+    {
+        return $this->container['per_hour'];
+    }
+
+    /**
+     * Sets per_hour
+     *
+     * @param int|null $per_hour Rate limit per hour
+     *
+     * @return self
+     */
+    public function setPerHour($per_hour)
+    {
+        if (is_null($per_hour)) {
+            throw new \InvalidArgumentException('non-nullable per_hour cannot be null');
+        }
+        $this->container['per_hour'] = $per_hour;
+
+        return $this;
+    }
+
+    /**
+     * Gets remaining_minute
+     *
+     * @return int|null
+     */
+    public function getRemainingMinute()
+    {
+        return $this->container['remaining_minute'];
+    }
+
+    /**
+     * Sets remaining_minute
+     *
+     * @param int|null $remaining_minute Remaining requests this minute
+     *
+     * @return self
+     */
+    public function setRemainingMinute($remaining_minute)
+    {
+        if (is_null($remaining_minute)) {
+            throw new \InvalidArgumentException('non-nullable remaining_minute cannot be null');
+        }
+        $this->container['remaining_minute'] = $remaining_minute;
+
+        return $this;
+    }
+
+    /**
+     * Gets remaining_hour
+     *
+     * @return int|null
+     */
+    public function getRemainingHour()
+    {
+        return $this->container['remaining_hour'];
+    }
+
+    /**
+     * Sets remaining_hour
+     *
+     * @param int|null $remaining_hour Remaining requests this hour
+     *
+     * @return self
+     */
+    public function setRemainingHour($remaining_hour)
+    {
+        if (is_null($remaining_hour)) {
+            throw new \InvalidArgumentException('non-nullable remaining_hour cannot be null');
+        }
+        $this->container['remaining_hour'] = $remaining_hour;
+
+        return $this;
+    }
+    /**
+     * Returns true if offset exists. False otherwise.
+     *
+     * @param integer $offset Offset
+     *
+     * @return boolean
+     */
+    public function offsetExists($offset): bool
+    {
+        return isset($this->container[$offset]);
+    }
+
+    /**
+     * Gets offset.
+     *
+     * @param integer $offset Offset
+     *
+     * @return mixed|null
+     */
+    #[\ReturnTypeWillChange]
+    public function offsetGet($offset)
+    {
+        return $this->container[$offset] ?? null;
+    }
+
+    /**
+     * Sets value based on offset.
+     *
+     * @param int|null $offset Offset
+     * @param mixed    $value  Value to be set
+     *
+     * @return void
+     */
+    public function offsetSet($offset, $value): void
+    {
+        if (is_null($offset)) {
+            $this->container[] = $value;
+        } else {
+            $this->container[$offset] = $value;
+        }
+    }
+
+    /**
+     * Unsets offset.
+     *
+     * @param integer $offset Offset
+     *
+     * @return void
+     */
+    public function offsetUnset($offset): void
+    {
+        unset($this->container[$offset]);
+    }
+
+    /**
+     * Serializes the object to a value that can be serialized natively by json_encode().
+     * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
+     *
+     * @return mixed Returns data which can be serialized by json_encode(), which is a value
+     * of any type other than a resource.
+     */
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
+       return ObjectSerializer::sanitizeForSerialization($this);
+    }
+
+    /**
+     * Gets the string presentation of the object
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return json_encode(
+            ObjectSerializer::sanitizeForSerialization($this),
+            JSON_PRETTY_PRINT
+        );
+    }
+
+    /**
+     * Gets a header-safe presentation of the object
+     *
+     * @return string
+     */
+    public function toHeaderValue()
+    {
+        return json_encode(ObjectSerializer::sanitizeForSerialization($this));
+    }
+}
+
+
